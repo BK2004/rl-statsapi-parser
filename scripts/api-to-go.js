@@ -15,6 +15,8 @@ const SUBSCRIBER_EXPORT_TAG = 'SUBSCRIBER EXPORT';
 const EVENTS_TEST_TAG = 'TEST EVENTS';
 const EVENT_PUBLISHERS_TAG = 'EVENT PUBLISHER STRUCT';
 const EVENT_PUBLISHERS_INIT_TAG = 'INIT PUBLISHER STRUCT';
+const PARSER_SUBSCRIBERS_TAG = 'PARSER SUBSCRIBERS';
+const INIT_PARSER_SUBSCRIBERS_TAG = 'INIT PARSER SUBSCRIBERS';
 
 const EVENT_STRUCT_PREAMBLE = `package events\n\n`;
 
@@ -107,19 +109,6 @@ async function writeListenerSwitch(eventNames) {
     return await writeToTags(LISTENER_DEST, LISTENER_SWITCH_TAG, newContents);
 }
 
-async function writeSubscriberExports(eventNames, eventDescriptions) {
-    let contents = "";
-    for (let i = 0; i < eventNames.length; i++) {
-        const eventName = eventNames[i];
-        const description = eventDescriptions[i] || "No description available.";
-        // Write description above export of newSubscriber for event
-        contents += `\t// ${description}\n`;
-        contents += `\t${eventName} = newSubscriber(events.${eventName})\n`;
-    }
-
-    return await writeToTags(PARSER_DEST, SUBSCRIBER_EXPORT_TAG, contents);
-}
-
 async function writeEventTests(eventNames) {
     let contents = "";
     for (const eventName of eventNames) {
@@ -141,6 +130,18 @@ async function writeEventPublishers(eventNames) {
     await writeToTags(LISTENER_DEST, EVENT_PUBLISHERS_INIT_TAG, contentsInit);
 }
 
+async function writeParserSubscribers(eventNames) {
+    let contentsType = "";
+    let contentsInit = "";
+    for (const eventName of eventNames) {
+        contentsType += `\t${eventName} Subscriber[events.${eventName}Data]\n`;
+        contentsInit += `\t\t ${eventName}: newSubscriber(publishers.${eventName}),\n`
+    }
+
+    await writeToTags(PARSER_DEST, PARSER_SUBSCRIBERS_TAG, contentsType);
+    await writeToTags(PARSER_DEST, INIT_PARSER_SUBSCRIBERS_TAG, contentsInit);
+}
+
 async function main() {
     const write = async (dest, label, callback, ...args) => {
         console.log(`Writing ${label} to ${dest}`);
@@ -158,8 +159,9 @@ async function main() {
 
         await write(LISTENER_DEST, 'listener switch', writeListenerSwitch, eventNames);
         await write(LISTENER_DEST, 'event publishers type and initialization', writeEventPublishers, eventNames);
-        await write(PARSER_DEST, 'subscriber exports', writeSubscriberExports, eventNames, eventDescriptions);
+        await write(PARSER_DEST, 'parser subscribers type and initialization', writeParserSubscribers, eventNames);
         await write(PARSER_DEST, 'event tests', writeEventTests, eventNames);
+
     } catch (e) {
         console.error("Error:", e);
     }
