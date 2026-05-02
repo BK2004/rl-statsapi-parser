@@ -7,12 +7,10 @@ import (
 	"time"
 )
 
-const testTimeoutSeconds = 30
-
-var testAll = flag.Bool("all", false, "Test all events")
+var testTimeoutSeconds = flag.Int("timeout", 30, "timeout of an event test (in seconds)")
+var testAll = flag.Bool("all", false, "test all events")
 
 // START TEST EVENTS
-
 var testUpdateState = flag.Bool("updatestate", false, "test event UpdateState")
 func TestUpdateState(t* testing.T) {
 	if !*testMatchPaused && !*testAll {
@@ -22,7 +20,7 @@ func TestUpdateState(t* testing.T) {
 	select {
 	case <-UpdateState.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive UpdateState event")
 	}
 }
@@ -36,7 +34,7 @@ func TestBallHit(t* testing.T) {
 	select {
 	case <-BallHit.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive BallHit event")
 	}
 }
@@ -50,7 +48,7 @@ func TestClockUpdatedSeconds(t* testing.T) {
 	select {
 	case <-ClockUpdatedSeconds.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive ClockUpdatedSeconds event")
 	}
 }
@@ -64,7 +62,7 @@ func TestCountdownBegin(t* testing.T) {
 	select {
 	case <-CountdownBegin.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive CountdownBegin event")
 	}
 }
@@ -78,7 +76,7 @@ func TestCrossbarHit(t* testing.T) {
 	select {
 	case <-CrossbarHit.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive CrossbarHit event")
 	}
 }
@@ -92,7 +90,7 @@ func TestGoalReplayEnd(t* testing.T) {
 	select {
 	case <-GoalReplayEnd.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalReplayEnd event")
 	}
 }
@@ -106,7 +104,7 @@ func TestGoalReplayStart(t* testing.T) {
 	select {
 	case <-GoalReplayStart.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalReplayStart event")
 	}
 }
@@ -120,7 +118,7 @@ func TestGoalReplayWillEnd(t* testing.T) {
 	select {
 	case <-GoalReplayWillEnd.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalReplayWillEnd event")
 	}
 }
@@ -134,7 +132,7 @@ func TestGoalScored(t* testing.T) {
 	select {
 	case <-GoalScored.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalScored event")
 	}
 }
@@ -148,7 +146,7 @@ func TestMatchCreated(t* testing.T) {
 	select {
 	case <-MatchCreated.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchCreated event")
 	}
 }
@@ -162,7 +160,7 @@ func TestMatchInitialized(t* testing.T) {
 	select {
 	case <-MatchInitialized.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchInitialized event")
 	}
 }
@@ -176,7 +174,7 @@ func TestMatchDestroyed(t* testing.T) {
 	select {
 	case <-MatchDestroyed.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchDestroyed event")
 	}
 }
@@ -190,7 +188,7 @@ func TestMatchEnded(t* testing.T) {
 	select {
 	case <-MatchEnded.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchEnded event")
 	}
 }
@@ -204,7 +202,7 @@ func TestMatchPaused(t* testing.T) {
 	select {
 	case <-MatchPaused.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchPaused event")
 	}
 }
@@ -218,7 +216,7 @@ func TestMatchUnpaused(t* testing.T) {
 	select {
 	case <-MatchUnpaused.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchUnpaused event")
 	}
 }
@@ -232,7 +230,7 @@ func TestPodiumStart(t* testing.T) {
 	select {
 	case <-PodiumStart.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive PodiumStart event")
 	}
 }
@@ -246,7 +244,7 @@ func TestReplayCreated(t* testing.T) {
 	select {
 	case <-ReplayCreated.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive ReplayCreated event")
 	}
 }
@@ -260,7 +258,7 @@ func TestRoundStarted(t* testing.T) {
 	select {
 	case <-RoundStarted.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive RoundStarted event")
 	}
 }
@@ -274,7 +272,7 @@ func TestStatfeedEvent(t* testing.T) {
 	select {
 	case <-StatfeedEvent.Subscribe():
 		break
-	case <-time.After(testTimeoutSeconds * time.Second):
+	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive StatfeedEvent event")
 	}
 }

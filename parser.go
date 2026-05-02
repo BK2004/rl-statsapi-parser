@@ -24,7 +24,6 @@ func newSubscriber[T any](publisher publisher.Publisher[T]) Subscriber[T] {
 
 var (
 	// START SUBSCRIBER EXPORT
-
 	// Sent X amount of times per second based on the player's PacketSendRate preference.
 	UpdateState = newSubscriber(events.UpdateState)
 	// Sent one frame after the ball is hit.
