@@ -112,7 +112,7 @@ async function writeListenerSwitch(eventNames) {
 async function writeEventTests(eventNames) {
     let contents = "";
     for (const eventName of eventNames) {
-        contents += `var test${eventName} = flag.Bool("${eventName.toLowerCase()}", false, "test event ${eventName}")\nfunc Test${eventName}(t* testing.T) {\n\tif !*testMatchPaused && !*testAll {\n\t\tt.Skip("skipping test of MatchPaused")\n\t}\n\tfmt.Printf("Waiting on ${eventName} event")\n\tselect {\n\tcase <-${eventName}.Subscribe():\n\t\tbreak\n\tcase <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):\n\t\tt.Errorf("Failed to receive ${eventName} event")\n\t}\n}\n\n`
+        contents += `var test${eventName} = flag.Bool("${eventName.toLowerCase()}", false, "test event ${eventName}")\nfunc Test${eventName}(t* testing.T) {\n\tif !*test${eventName} && !*testAll {\n\t\tt.Skip("skipping test of ${eventName}")\n\t}\n\tch := parser.${eventName}.Subscribe()\n\tselect {\n\tcase <-ch:\n\t\tbreak\n\tcase <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):\n\t\tt.Errorf("Failed to receive ${eventName} event")\n\t}\n}\n\n`
     }
 
     return await writeToTags(PARSER_TEST_DEST, EVENTS_TEST_TAG, contents);

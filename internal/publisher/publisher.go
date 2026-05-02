@@ -41,6 +41,9 @@ func (p *publisher[T]) Publish(data T) {
 	defer p.subscribersMutex.RUnlock()
 
 	for _, ch := range p.subscribers {
-		ch <- data
+		select {
+		case ch <- data:
+		default:
+		}
 	}
 }

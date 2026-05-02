@@ -2,23 +2,26 @@ package parser
 
 import (
 	"flag"
-	"fmt"
 	"testing"
 	"time"
+
+	"github.com/bk2004/rl-statsapi-parser/internal/listener"
 )
 
 var testTimeoutSeconds = flag.Int("timeout", 30, "timeout of an event test (in seconds)")
 var testAll = flag.Bool("all", false, "test all events")
+var parser Parser
 
 // START TEST EVENTS
 var testUpdateState = flag.Bool("updatestate", false, "test event UpdateState")
-func TestUpdateState(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestUpdateState(t *testing.T) {
+	if !*testUpdateState && !*testAll {
+		t.Skip("skipping test of UpdateState")
 	}
-	fmt.Printf("Waiting on UpdateState event")
+	ch := parser.UpdateState.Subscribe()
 	select {
-	case <-UpdateState.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive UpdateState event")
@@ -26,13 +29,14 @@ func TestUpdateState(t* testing.T) {
 }
 
 var testBallHit = flag.Bool("ballhit", false, "test event BallHit")
-func TestBallHit(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestBallHit(t *testing.T) {
+	if !*testBallHit && !*testAll {
+		t.Skip("skipping test of BallHit")
 	}
-	fmt.Printf("Waiting on BallHit event")
+	ch := parser.BallHit.Subscribe()
 	select {
-	case <-BallHit.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive BallHit event")
@@ -40,13 +44,14 @@ func TestBallHit(t* testing.T) {
 }
 
 var testClockUpdatedSeconds = flag.Bool("clockupdatedseconds", false, "test event ClockUpdatedSeconds")
-func TestClockUpdatedSeconds(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestClockUpdatedSeconds(t *testing.T) {
+	if !*testClockUpdatedSeconds && !*testAll {
+		t.Skip("skipping test of ClockUpdatedSeconds")
 	}
-	fmt.Printf("Waiting on ClockUpdatedSeconds event")
+	ch := parser.ClockUpdatedSeconds.Subscribe()
 	select {
-	case <-ClockUpdatedSeconds.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive ClockUpdatedSeconds event")
@@ -54,13 +59,14 @@ func TestClockUpdatedSeconds(t* testing.T) {
 }
 
 var testCountdownBegin = flag.Bool("countdownbegin", false, "test event CountdownBegin")
-func TestCountdownBegin(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestCountdownBegin(t *testing.T) {
+	if !*testCountdownBegin && !*testAll {
+		t.Skip("skipping test of CountdownBegin")
 	}
-	fmt.Printf("Waiting on CountdownBegin event")
+	ch := parser.CountdownBegin.Subscribe()
 	select {
-	case <-CountdownBegin.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive CountdownBegin event")
@@ -68,13 +74,14 @@ func TestCountdownBegin(t* testing.T) {
 }
 
 var testCrossbarHit = flag.Bool("crossbarhit", false, "test event CrossbarHit")
-func TestCrossbarHit(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestCrossbarHit(t *testing.T) {
+	if !*testCrossbarHit && !*testAll {
+		t.Skip("skipping test of CrossbarHit")
 	}
-	fmt.Printf("Waiting on CrossbarHit event")
+	ch := parser.CrossbarHit.Subscribe()
 	select {
-	case <-CrossbarHit.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive CrossbarHit event")
@@ -82,13 +89,14 @@ func TestCrossbarHit(t* testing.T) {
 }
 
 var testGoalReplayEnd = flag.Bool("goalreplayend", false, "test event GoalReplayEnd")
-func TestGoalReplayEnd(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestGoalReplayEnd(t *testing.T) {
+	if !*testGoalReplayEnd && !*testAll {
+		t.Skip("skipping test of GoalReplayEnd")
 	}
-	fmt.Printf("Waiting on GoalReplayEnd event")
+	ch := parser.GoalReplayEnd.Subscribe()
 	select {
-	case <-GoalReplayEnd.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalReplayEnd event")
@@ -96,13 +104,14 @@ func TestGoalReplayEnd(t* testing.T) {
 }
 
 var testGoalReplayStart = flag.Bool("goalreplaystart", false, "test event GoalReplayStart")
-func TestGoalReplayStart(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestGoalReplayStart(t *testing.T) {
+	if !*testGoalReplayStart && !*testAll {
+		t.Skip("skipping test of GoalReplayStart")
 	}
-	fmt.Printf("Waiting on GoalReplayStart event")
+	ch := parser.GoalReplayStart.Subscribe()
 	select {
-	case <-GoalReplayStart.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalReplayStart event")
@@ -110,13 +119,14 @@ func TestGoalReplayStart(t* testing.T) {
 }
 
 var testGoalReplayWillEnd = flag.Bool("goalreplaywillend", false, "test event GoalReplayWillEnd")
-func TestGoalReplayWillEnd(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestGoalReplayWillEnd(t *testing.T) {
+	if !*testGoalReplayWillEnd && !*testAll {
+		t.Skip("skipping test of GoalReplayWillEnd")
 	}
-	fmt.Printf("Waiting on GoalReplayWillEnd event")
+	ch := parser.GoalReplayWillEnd.Subscribe()
 	select {
-	case <-GoalReplayWillEnd.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalReplayWillEnd event")
@@ -124,13 +134,14 @@ func TestGoalReplayWillEnd(t* testing.T) {
 }
 
 var testGoalScored = flag.Bool("goalscored", false, "test event GoalScored")
-func TestGoalScored(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestGoalScored(t *testing.T) {
+	if !*testGoalScored && !*testAll {
+		t.Skip("skipping test of GoalScored")
 	}
-	fmt.Printf("Waiting on GoalScored event")
+	ch := parser.GoalScored.Subscribe()
 	select {
-	case <-GoalScored.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive GoalScored event")
@@ -138,13 +149,14 @@ func TestGoalScored(t* testing.T) {
 }
 
 var testMatchCreated = flag.Bool("matchcreated", false, "test event MatchCreated")
-func TestMatchCreated(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestMatchCreated(t *testing.T) {
+	if !*testMatchCreated && !*testAll {
+		t.Skip("skipping test of MatchCreated")
 	}
-	fmt.Printf("Waiting on MatchCreated event")
+	ch := parser.MatchCreated.Subscribe()
 	select {
-	case <-MatchCreated.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchCreated event")
@@ -152,13 +164,14 @@ func TestMatchCreated(t* testing.T) {
 }
 
 var testMatchInitialized = flag.Bool("matchinitialized", false, "test event MatchInitialized")
-func TestMatchInitialized(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestMatchInitialized(t *testing.T) {
+	if !*testMatchInitialized && !*testAll {
+		t.Skip("skipping test of MatchInitialized")
 	}
-	fmt.Printf("Waiting on MatchInitialized event")
+	ch := parser.MatchInitialized.Subscribe()
 	select {
-	case <-MatchInitialized.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchInitialized event")
@@ -166,13 +179,14 @@ func TestMatchInitialized(t* testing.T) {
 }
 
 var testMatchDestroyed = flag.Bool("matchdestroyed", false, "test event MatchDestroyed")
-func TestMatchDestroyed(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestMatchDestroyed(t *testing.T) {
+	if !*testMatchDestroyed && !*testAll {
+		t.Skip("skipping test of MatchDestroyed")
 	}
-	fmt.Printf("Waiting on MatchDestroyed event")
+	ch := parser.MatchDestroyed.Subscribe()
 	select {
-	case <-MatchDestroyed.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchDestroyed event")
@@ -180,13 +194,14 @@ func TestMatchDestroyed(t* testing.T) {
 }
 
 var testMatchEnded = flag.Bool("matchended", false, "test event MatchEnded")
-func TestMatchEnded(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestMatchEnded(t *testing.T) {
+	if !*testMatchEnded && !*testAll {
+		t.Skip("skipping test of MatchEnded")
 	}
-	fmt.Printf("Waiting on MatchEnded event")
+	ch := parser.MatchEnded.Subscribe()
 	select {
-	case <-MatchEnded.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchEnded event")
@@ -194,13 +209,14 @@ func TestMatchEnded(t* testing.T) {
 }
 
 var testMatchPaused = flag.Bool("matchpaused", false, "test event MatchPaused")
-func TestMatchPaused(t* testing.T) {
+
+func TestMatchPaused(t *testing.T) {
 	if !*testMatchPaused && !*testAll {
 		t.Skip("skipping test of MatchPaused")
 	}
-	fmt.Printf("Waiting on MatchPaused event")
+	ch := parser.MatchPaused.Subscribe()
 	select {
-	case <-MatchPaused.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchPaused event")
@@ -208,13 +224,14 @@ func TestMatchPaused(t* testing.T) {
 }
 
 var testMatchUnpaused = flag.Bool("matchunpaused", false, "test event MatchUnpaused")
-func TestMatchUnpaused(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestMatchUnpaused(t *testing.T) {
+	if !*testMatchUnpaused && !*testAll {
+		t.Skip("skipping test of MatchUnpaused")
 	}
-	fmt.Printf("Waiting on MatchUnpaused event")
+	ch := parser.MatchUnpaused.Subscribe()
 	select {
-	case <-MatchUnpaused.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive MatchUnpaused event")
@@ -222,13 +239,14 @@ func TestMatchUnpaused(t* testing.T) {
 }
 
 var testPodiumStart = flag.Bool("podiumstart", false, "test event PodiumStart")
-func TestPodiumStart(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestPodiumStart(t *testing.T) {
+	if !*testPodiumStart && !*testAll {
+		t.Skip("skipping test of PodiumStart")
 	}
-	fmt.Printf("Waiting on PodiumStart event")
+	ch := parser.PodiumStart.Subscribe()
 	select {
-	case <-PodiumStart.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive PodiumStart event")
@@ -236,13 +254,14 @@ func TestPodiumStart(t* testing.T) {
 }
 
 var testReplayCreated = flag.Bool("replaycreated", false, "test event ReplayCreated")
-func TestReplayCreated(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestReplayCreated(t *testing.T) {
+	if !*testReplayCreated && !*testAll {
+		t.Skip("skipping test of ReplayCreated")
 	}
-	fmt.Printf("Waiting on ReplayCreated event")
+	ch := parser.ReplayCreated.Subscribe()
 	select {
-	case <-ReplayCreated.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive ReplayCreated event")
@@ -250,13 +269,14 @@ func TestReplayCreated(t* testing.T) {
 }
 
 var testRoundStarted = flag.Bool("roundstarted", false, "test event RoundStarted")
-func TestRoundStarted(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestRoundStarted(t *testing.T) {
+	if !*testRoundStarted && !*testAll {
+		t.Skip("skipping test of RoundStarted")
 	}
-	fmt.Printf("Waiting on RoundStarted event")
+	ch := parser.RoundStarted.Subscribe()
 	select {
-	case <-RoundStarted.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive RoundStarted event")
@@ -264,13 +284,14 @@ func TestRoundStarted(t* testing.T) {
 }
 
 var testStatfeedEvent = flag.Bool("statfeedevent", false, "test event StatfeedEvent")
-func TestStatfeedEvent(t* testing.T) {
-	if !*testMatchPaused && !*testAll {
-		t.Skip("skipping test of MatchPaused")
+
+func TestStatfeedEvent(t *testing.T) {
+	if !*testStatfeedEvent && !*testAll {
+		t.Skip("skipping test of StatfeedEvent")
 	}
-	fmt.Printf("Waiting on StatfeedEvent event")
+	ch := parser.StatfeedEvent.Subscribe()
 	select {
-	case <-StatfeedEvent.Subscribe():
+	case <-ch:
 		break
 	case <-time.After(time.Duration(*testTimeoutSeconds) * time.Second):
 		t.Errorf("Failed to receive StatfeedEvent event")
@@ -280,6 +301,10 @@ func TestStatfeedEvent(t* testing.T) {
 // END TEST EVENTS
 
 func TestMain(m *testing.M) {
+	parser = New(Config{
+		Port: listener.PORT,
+	})
 	flag.Parse()
 	m.Run()
+	parser.Quit()
 }
