@@ -10,6 +10,10 @@ const LISTENER_DEST = join(import.meta.dirname, '..', 'internal', 'listener', 'l
 const PARSER_DEST = join(import.meta.dirname, '..', 'parser.go');
 const PARSER_TEST_DEST = join(import.meta.dirname, '..', 'parser_test.go');
 
+const EVENT_FWDS = {
+
+}
+
 const LISTENER_SWITCH_TAG = 'LISTEN EVENT SWITCH';
 const SUBSCRIBER_EXPORT_TAG = 'SUBSCRIBER EXPORT';
 const EVENTS_TEST_TAG = 'TEST EVENTS';
@@ -106,6 +110,16 @@ async function writeListenerSwitch(eventNames) {
         newContents += `\t\t\treturn\n`;
         newContents += `\t\t}\n`;
         newContents += `\t\tpublishers.${eventName}.Publish(parsed)\n`;
+    }
+    // Write fwd cases
+    for (const [from, to] of Object.entries(EVENT_FWDS)) {
+        newContents += `\tcase "${from}":\n`;
+        newContents += `\t\tvar parsed events.${to}Data\n`;
+        newContents += `\t\tif err := json.Unmarshal(data, &parsed); err != nil {\n`;
+        newContents += `\t\t\tfmt.Printf("Failed to unmarshal ${from} data: %v.", err)\n`;
+        newContents += `\t\t\treturn\n`;
+        newContents += `\t\t}\n`;
+        newContents += `\t\tpublishers.${to}.Publish(parsed)\n`;
     }
     return await writeToTags(LISTENER_DEST, LISTENER_SWITCH_TAG, newContents);
 }
